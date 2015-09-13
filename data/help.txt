@@ -1,0 +1,10 @@
+ApprovalCount
+=============
+A bot for Euphoria that counts :bronze:s, :bronze?!:s, and :+1:s.
+
+To increase the counter, send a message with any of those emoji.
+
+This bot is open-source! See the repository on GitHub at https://github.com/ArkaneMoose/ApprovalCount/.
+File any issues or feature requests at https://github.com/ArkaneMoose/ApprovalCount/issues/.
+For detailed documentation, check out the wiki at https://github.com/ArkaneMoose/ApprovalCount/wiki/.
+This bot complies with the Euphorian bot standards at https://github.com/jedevc/botrulez/blob/master/README.md.

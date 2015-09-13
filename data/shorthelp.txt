@@ -1,0 +1,1 @@
+@ApprovalBot is a bot that counts :bronze:s, :bronze?!:s, and :+1:s.

@@ -28,45 +28,53 @@ class ApprovalCount(eu.ping_room.PingRoom, eu.chat_room.ChatRoom, eu.nick_room.N
     def handle_chat(self, message):
         content = message['content']
         new_count = self.count + content.count(':bronze:') + content.count(':bronze?!:') + content.count(':+1:')
+        if content.startswith('!'):
+            message_id = message['id']
+            # !ping
+            match = EuphUtils.command('!ping', '').match(content) or EuphUtils.command('!ping', self.nickname).match(content) or EuphUtils.command('!ping', self.default_nickname).match(content)
+            if match:
+                self.change_nick(self.default_nickname)
+                self.send_chat(self.ping_text, message_id)
+                self.update_nick()
+                return
+            # !uptime @ApprovalCount
+            match = EuphUtils.command('!uptime', self.nickname).match(content) or EuphUtils.command('!uptime', self.default_nickname).match(content)
+            if match:
+                self.change_nick(self.default_nickname)
+                self.send_chat(EuphUtils.uptime_str(self.start_time), message_id)
+                self.update_nick()
+                return
+            # !help
+            match = EuphUtils.command('!help', '').match(content)
+            if match:
+                self.change_nick(self.default_nickname)
+                self.send_chat(self.short_help_text, message_id)
+                self.update_nick()
+                return
+            # !help @ApprovalCount
+            match = EuphUtils.command('!help', self.nickname).match(content) or EuphUtils.command('!help', self.default_nickname).match(content)
+            if match:
+                self.change_nick(self.default_nickname)
+                self.send_chat(self.help_text, message_id)
+                self.update_nick()
+                return
+            # !reset @ApprovalCount
+            match = EuphUtils.command('!reset', self.nickname).match(content) or EuphUtils.command('!reset', self.default_nickname).match(content)
+            if match:
+                self.count = 0
+                new_count = 0
+                self.change_nick(self.default_nickname)
+                self.send_chat(':bronze: count reset to 0.', message_id)
+                self.update_nick()
+                return
+            # !restart @ApprovalCount
+            match = EuphUtils.command('!restart', self.nickname).match(content) or EuphUtils.command('!restart', self.default_nickname).match(content)
+            if match:
+                self.change_nick(self.default_nickname)
+                self.send_chat('/me is restarting...', message_id)
+                self.update_nick()
+                self.quit()
+                return
         if self.count != new_count:
             self.count = new_count
             self.update_nick()
-        if not content.startswith('!'):
-            return
-        message_id = message['id']
-        # !ping
-        match = EuphUtils.command('!ping', '').match(content) or EuphUtils.command('!ping', self.nickname).match(content) or EuphUtils.command('!ping', self.default_nickname).match(content)
-        if match:
-            self.change_nick(self.default_nickname)
-            self.send_chat(self.ping_text, message_id)
-            self.update_nick()
-            return
-        # !uptime @ApprovalCount
-        match = EuphUtils.command('!uptime', self.nickname).match(content) or EuphUtils.command('!uptime', self.default_nickname).match(content)
-        if match:
-            self.change_nick(self.default_nickname)
-            self.send_chat(EuphUtils.uptime_str(self.start_time), message_id)
-            self.update_nick()
-            return
-        # !help
-        match = EuphUtils.command('!help', '').match(content)
-        if match:
-            self.change_nick(self.default_nickname)
-            self.send_chat(self.short_help_text, message_id)
-            self.update_nick()
-            return
-        # !help @ApprovalCount
-        match = EuphUtils.command('!help', self.nickname).match(content) or EuphUtils.command('!help', self.default_nickname).match(content)
-        if match:
-            self.change_nick(self.default_nickname)
-            self.send_chat(self.help_text, message_id)
-            self.update_nick()
-            return
-        # !restart @ApprovalCount
-        match = EuphUtils.command('!restart', self.nickname).match(content) or EuphUtils.command('!restart', self.default_nickname).match(content)
-        if match:
-            self.change_nick(self.default_nickname)
-            self.send_chat('/me is restarting...', message_id)
-            self.update_nick()
-            self.quit()
-            return

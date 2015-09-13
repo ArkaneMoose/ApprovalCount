@@ -20,8 +20,8 @@ with open(os.path.join(data_directory, 'shorthelp.txt')) as f:
     short_help_text = f.read()
 
 def main():
-    autoreply = AutoReply(room_name, password, nickname, help_text, short_help_text)
-    eu.executable.start(autoreply)
+    approvalcount = ApprovalCount(room_name, password, nickname, help_text, short_help_text)
+    eu.executable.start(approvalcount)
 
 if __name__ == '__main__':
     if len(sys.argv) > 1:

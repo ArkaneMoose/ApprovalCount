@@ -1,10 +1,12 @@
 import time
+import os
+import json
 
 import euphoria as eu
 from euphutils import EuphUtils
 
 class ApprovalCount(eu.ping_room.PingRoom, eu.chat_room.ChatRoom, eu.nick_room.NickRoom):
-    def __init__(self, room, password=None, nickname='ApprovalCount', help_text='', short_help_text='', ping_text='Pong!'):
+    def __init__(self, room, password=None, nickname='ApprovalCount', help_text='', short_help_text='', ping_text='Pong!', save_file='save.json'):
         super().__init__(room, password)
         self.default_nickname = nickname
         self.nickname = self.default_nickname
@@ -16,6 +18,8 @@ class ApprovalCount(eu.ping_room.PingRoom, eu.chat_room.ChatRoom, eu.nick_room.N
         self.ping_text = ping_text
 
         self.count = 0
+        self.save_file = save_file
+        self.load_save_file()
 
     def ready(self):
         super().ready()
@@ -24,10 +28,25 @@ class ApprovalCount(eu.ping_room.PingRoom, eu.chat_room.ChatRoom, eu.nick_room.N
 
     def update_nick(self):
         self.change_nick(str(self.count) + ' :bronze:')
+        self.update_save_file()
+
+    def update_save_file(self):
+        try:
+            with open(os.path.join(os.path.realpath(os.path.dirname(__file__)), '..', self.save_file), 'w') as file:
+                json.dump({'count': self.count}, file)
+        except (OSError, IOError):
+            pass
+
+    def load_save_file(self):
+        try:
+            with open(os.path.join(os.path.realpath(os.path.dirname(__file__)), '..', self.save_file)) as file:
+                self.count = json.load(file).get('count', 0)
+        except (ValueError, OSError, IOError):
+            pass
 
     def handle_chat(self, message):
         content = message['content']
-        new_count = self.count + content.count(':bronze:') + content.count(':bronze?!:') + content.count(':+1:')
+        new_count = self.count + content.count(':bronze:') + content.count(':bronze?!:') + content.count(':bronze!?:') + content.count(':+1:')
         if content.startswith('!'):
             message_id = message['id']
             # !ping

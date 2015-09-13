@@ -16,13 +16,13 @@ class ApprovalCount(eu.ping_room.PingRoom, eu.chat_room.ChatRoom, eu.nick_room.N
         self.ping_text = ping_text
 
         self.count = 0
-        self.update_nick()
 
     def ready(self):
         super().ready()
         self.send_chat('/me Hello, world!')
+        self.update_nick()
 
-    def update_nick():
+    def update_nick(self):
         self.change_nick(str(self.count) + ' :bronze:')
 
     def handle_chat(self, message):

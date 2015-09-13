@@ -1,5 +1,7 @@
-# AutoReply
-An automatic vacation responder bot for Euphoria.
+# ApprovalCount
 
-This bot will respond to !notify's for people who have an active vacation response in the system.  
-The bot works similarly, if not identically, to an out-of-office or vacation reply system found in most email services.
+A bot for Euphoria that counts :bronze:s, :bronze?!:s, and :+1:s.
+
+To increase the counter, send a message with any of those emoji.
+
+This bot complies with the Euphorian bot standards at https://github.com/jedevc/botrulez/blob/master/README.md.
